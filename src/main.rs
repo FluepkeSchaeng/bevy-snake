@@ -1,12 +1,23 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::{
+    prelude::*,
+    window::{PrimaryWindow, WindowResolution},
+};
 
 fn main() {
     App::new()
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                title: "Snake!".to_string(),
+                resolution: WindowResolution::new(500.0, 500.0).with_scale_factor_override(1.0),
+                ..default()
+            }),
+            ..default()
+        }))
+        .insert_resource(ClearColor(Color::rgb(0.04, 0.04, 0.04)))
         .add_startup_system(setup_camera)
         .add_startup_system(spawn_snake)
         .add_system(snake_movement)
         .add_systems((size_scaling, position_translation).in_base_set(CoreSet::PostUpdate))
-        .add_plugins(DefaultPlugins)
         .run();
 }
 
